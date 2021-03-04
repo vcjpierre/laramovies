@@ -1,4 +1,4 @@
-# Laravel Movies
+# LaraMovies 🎬
  Movie Application using the TMDb Rest API.
 
 ## Setup 🚀
