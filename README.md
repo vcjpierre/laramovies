@@ -6,7 +6,7 @@
 - Clone the repository
   
   ```
-  git clone https://github.com/vcjpierre/laravel-movies.git
+  git clone https://github.com/vcjpierre/laramovies.git
   cd laravel-movies
   ``` 
 
