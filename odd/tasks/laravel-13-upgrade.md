@@ -19,19 +19,19 @@ S5. The existing feature suite passes unchanged against the upgraded stack: `tes
 
 S6. The container build targets PHP 8.3: `Dockerfile` uses `ARG PHP_VERSION=8.3` and no longer patches `app/Http/Middleware/TrustProxies.php` with `sed`, because that middleware no longer declares a `$proxies` property.
 
-S7. Frontend dependencies are bumped where the bump is a drop-in replacement: `axios` moves from `^0.21` to `^1`, whose advisories (CVE-2021-3749, CVE-2023-45857) are unpatched in the 0.x line. The Laravel Mix + Tailwind 1.x asset pipeline is deliberately left alone: moving it to Vite + Tailwind 4 is a CSS rewrite, not a dependency bump, and is out of scope.
+S7. Frontend dependencies are bumped where the bump is a drop-in replacement: `axios` moves from `^0.21` to `^1`, whose advisories (CVE-2021-3749, CVE-2023-45857) are unpatched in the 0.x line. `npm audit` reports no critical advisories afterwards. The Laravel Mix + Tailwind 1.x asset pipeline is deliberately left alone: moving it to Vite + Tailwind 4 is a CSS rewrite, not a dependency bump, and is out of scope. Because Laravel Mix 6.0.49 reads `webpack/lib/SizeFormatHelpers`, which webpack removed after 5.94.0, `webpack` is pinned to `5.94.0` through an npm `overrides` entry so the asset build keeps working on a patched webpack.
 
 ## Tasks
 
 | ID | Specs | Route | Risk | Commit | Status |
 |----|-------|-------|------|--------|--------|
-| T1 | S1, S2 | inline | item 5 (dependencies) | pending | pending |
-| T2 | S3 | inline | none | pending | pending |
-| T3 | S4 | inline | none | pending | pending |
-| T4 | S3 | inline | none | pending | pending |
-| T5 | S5 | inline | none | pending | pending |
-| T6 | S6, S7 | inline | item 5 (delivery/environment) | pending | pending |
-| T7 | S2, S5 | inline | none | pending | pending |
+| T1 | S1, S2 | inline | item 5 (dependencies) | `08c732a` | done |
+| T2 | S3 | inline | none | `a69a2f2` | done |
+| T3 | S4 | inline | none | `a69a2f2` | done |
+| T4 | S3 | inline | none | `a69a2f2` | done |
+| T5 | S5 | inline | none | `a69a2f2` | done |
+| T6 | S6, S7 | inline | item 5 (delivery/environment) | `aba2dea` | done |
+| T7 | S2, S5 | inline | none | `a69a2f2` | done |
 
 ## Log
 
@@ -46,3 +46,9 @@ L4. 2026-10-22 — Laravel 8 has no patched branch: the remaining advisories (te
 L5. 2026-10-22 — Chosen target versions: `laravel/framework ^13.17`, `livewire/livewire ^4.4` (4.4.8, `illuminate ^10|^11|^12|^13`), `guzzlehttp/guzzle ^8.3` (8.3.0, pulls `guzzlehttp/psr7 ^3.2` which carries the host-confusion and CRLF fixes), `spatie/laravel-view-models ^1.6` (1.6.2, `illuminate ^8|^9|^10|^11|^12|^13`), `phpunit/phpunit ^12.5`, `nunomaduro/collision ^8.6`, `fakerphp/faker ^1.24`, `laravel/tinker ^3.0`.
 
 L6. 2026-10-22 — Migration path chosen: full Laravel 11+ skeleton restructure rather than staying on the Laravel 8 layout. Reason: the legacy `config/app.php` `providers` array is only a compatibility shim in Laravel 13 (`RegisterProviders` falls back to `ServiceProvider::defaultProviders()` only when the key is absent), so keeping the Laravel 8 provider list would silently drop providers added in Laravel 9-13.
+
+L7. 2026-10-22 — Differential check against the base commit `0426552` in a scratch worktree (`mktemp -d` equivalent under the system temp dir, removed afterwards). Baseline result: 1 failing test, `ViewTvTest::the_tv_index_page_shows_the_correct_info`, with `Undefined array key "genres"`. Cause is a pre-existing bug in the test, not in the application: the test fakes `https://api.themoviedb.org/3/genre/movie/list` while `TvController@index` requests `https://api.themoviedb.org/3/genre/tv/list`, so the genres request was never stubbed. Fixed in the test (`genre/movie/list` -> `genre/tv/list`); the same fake key in `ViewMoviesTest` is correct and was left alone. Post-upgrade result: 9 tests, 9 passing.
+
+L8. 2026-10-22 — `npm audit fix` broke the asset build: it moved `webpack` to 5.112.0, which removed `webpack/lib/SizeFormatHelpers`, the file Laravel Mix 6.0.49 requires. `webpack` is pinned to 5.94.0 with an npm `overrides` entry, which is the newest release that still ships that file and is not affected by GHSA-4vj7-3p9v-mh7p. `npm audit` afterwards: 55 advisories (18 low, 23 moderate, 14 high), 0 critical, down from 8 critical before. The remaining advisories sit in the Laravel Mix / webpack-dev-server toolchain, which never ships to the browser; clearing them requires the Mix to Vite migration that S7 excludes.
+
+L9. 2026-10-22 — `TRUSTED_PROXIES` replaces the build-time `sed` patch of `app/Http/Middleware/TrustProxies.php`. Verified equivalent: `trustProxies(at: null)` trusts no proxy (same as the old `protected $proxies = null`) and the framework's default header set is `HEADER_X_FORWARDED_FOR | HOST | PORT | PROTO | PREFIX | AWS_ELB`, which is what `Request::HEADER_X_FORWARDED_ALL` resolves to. `at: '*'` reproduces the old patched value. The value is set in the Dockerfile (`ENV TRUSTED_PROXIES="*"`) and in `fly.toml`'s `[env]`.
