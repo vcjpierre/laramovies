@@ -6,8 +6,7 @@
     <title>Movie App</title>
 
     <link rel="stylesheet" href="/css/main.css">
-    <livewire:styles>
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    @livewireStyles
 </head>
 <body class="font-sans bg-gray-900 text-white">
     <nav class="border-b border-gray-800">
@@ -29,7 +28,7 @@
                 </li>
             </ul>
             <div class="flex flex-col md:flex-row items-center">
-                <livewire:search-dropdown>
+                <livewire:search-dropdown />
                 <div class="md:ml-4 mt-3 md:mt-0">
                     <a href="#">
                         <img src="{{ url('img/avatar.jpg') }}" alt="avatar" class="rounded-full w-8 h-8">
@@ -39,7 +38,7 @@
         </div>
     </nav>
     @yield('content')
-    <livewire:scripts>
+    @livewireScripts
     @yield('scripts')
 </body>
 </html>

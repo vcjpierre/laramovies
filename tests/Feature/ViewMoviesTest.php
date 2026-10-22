@@ -5,11 +5,11 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Livewire\Livewire;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ViewMoviesTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function the_main_page_shows_correct_info()
     {
         Http::fake([
@@ -28,7 +28,7 @@ class ViewMoviesTest extends TestCase
         $response->assertSee('Now Playing Fake Movie');
     }
 
-    /** @test */
+    #[Test]
     public function the_movie_page_shows_the_correct_info()
     {
         Http::fake([
@@ -42,7 +42,7 @@ class ViewMoviesTest extends TestCase
         $response->assertSee('Dwayne Johnson');
     }
 
-    /** @test */
+    #[Test]
     public function the_search_dropdown_works_correctly()
     {
         Http::fake([

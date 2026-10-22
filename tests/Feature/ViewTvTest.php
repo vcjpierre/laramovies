@@ -5,11 +5,11 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Livewire\Livewire;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ViewTvTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function the_tv_index_page_shows_the_correct_info()
     {
         $this->withoutExceptionHandling();
@@ -17,7 +17,7 @@ class ViewTvTest extends TestCase
         Http::fake([
             'https://api.themoviedb.org/3/tv/popular' => $this->fakePopularTv(),
             'https://api.themoviedb.org/3/tv/top_rated' => $this->fakeHighestRatedTv(),
-            'https://api.themoviedb.org/3/genre/movie/list' => $this->fakeGenres(),
+            'https://api.themoviedb.org/3/genre/tv/list' => $this->fakeGenres(),
         ]);
 
 
@@ -31,7 +31,7 @@ class ViewTvTest extends TestCase
         $response->assertSee('Breaking Bad');
     }
 
-    /** @test */
+    #[Test]
     public function the_tv_page_shows_the_correct_info()
     {
         $this->withoutExceptionHandling();

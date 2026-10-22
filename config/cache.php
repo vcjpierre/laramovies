@@ -101,4 +101,20 @@ return [
 
     'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Serializable Cache Classes
+    |--------------------------------------------------------------------------
+    |
+    | The cache serialization strategy controls how the cache values are
+    | serialized and deserialized. The "json" strategy prevents the
+    | "gadget chain" serialization attacks if the APP_KEY is leaked.
+    |
+    | When set to false, the cache will not serialize values, and any
+    | attempt to store an object in the cache will fail.
+    |
+    */
+
+    'serializable_classes' => false,
+
 ];

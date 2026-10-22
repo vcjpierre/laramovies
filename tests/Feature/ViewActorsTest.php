@@ -4,11 +4,11 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ViewActorsTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function the_index_page_shows_the_correct_info()
     {
         Http::fake([
@@ -26,7 +26,7 @@ class ViewActorsTest extends TestCase
         $response->assertSee('The Avengers, Iron Man, Avengers: Infinity War');
     }
 
-    /** @test */
+    #[Test]
     public function the_index_page_2_shows_the_correct_info()
     {
         Http::fake([
@@ -44,7 +44,7 @@ class ViewActorsTest extends TestCase
         $response->assertSee('The Avengers 2, Iron Man 2, Avengers: Infinity War 2');
     }
 
-    /** @test */
+    #[Test]
     public function the_actor_page_shows_the_correct_info()
     {
         Http::fake([

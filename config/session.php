@@ -50,6 +50,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Session Serialization
+    |--------------------------------------------------------------------------
+    |
+    | The session serialization strategy controls how the session data is
+    | serialized and deserialized. PHP's "serialize" strategy keeps the
+    | session payload intact, while the "json" strategy prevents the
+    | "gadget chain" serialization attacks if the APP_KEY is leaked.
+    |
+    */
+
+    'serialization' => 'json',
+
+    /*
+    |--------------------------------------------------------------------------
     | Session File Location
     |--------------------------------------------------------------------------
     |
