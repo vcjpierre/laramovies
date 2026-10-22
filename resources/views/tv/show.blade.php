@@ -124,10 +124,7 @@
                 @foreach ($tvshow['images'] as $image)
                     <div class="mt-8">
                         <a
-                            @click.prevent="
-                                isOpen = true
-                                image='{{ 'https://image.tmdb.org/t/p/original/'.$image['file_path'] }}'
-                            "
+                            @click.prevent="isOpen = true; image = '{{ 'https://image.tmdb.org/t/p/w1280/'.$image['file_path'] }}'"
                             href="#"
                         >
                             <img src="{{ 'https://image.tmdb.org/t/p/w500/'.$image['file_path'] }}"
@@ -143,8 +140,8 @@
                 x-show="isOpen"
             >
                 <div class="container mx-auto lg:px-32 rounded-lg overflow-y-auto">
-                    <div class="bg-gray-900 rounded">
-                        <div class="flex justify-end pr-4 pt-2">
+                    <div class="bg-gray-900 rounded" style="max-height: 90vh;">
+                        <div class="flex justify-end pr-4 pt-2 sticky top-0 bg-gray-900 z-10">
                             <button
                                 @click="isOpen = false"
                                 @keydown.escape.window="isOpen = false"
@@ -152,7 +149,7 @@
                             </button>
                         </div>
                         <div class="modal-body px-8 py-8">
-                            <img :src="image" alt="poster">
+                            <img :src="image" alt="poster" class="block mx-auto" style="max-height: 70vh; width: auto; max-width: 100%;">
                         </div>
                     </div>
                 </div>
