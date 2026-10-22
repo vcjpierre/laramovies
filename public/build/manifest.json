@@ -1,0 +1,11 @@
+{
+  "resources/css/main.css": {
+    "file": "assets/main-Cvfl2Rn4.css",
+    "name": "main",
+    "names": [
+      "main.css"
+    ],
+    "src": "resources/css/main.css",
+    "isEntry": true
+  }
+}

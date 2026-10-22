@@ -44,7 +44,7 @@ class TvViewModel extends ViewModel
 
             return collect($tvshow)->merge([
                 'poster_path' => 'https://image.tmdb.org/t/p/w500/'.$tvshow['poster_path'],
-                'vote_average' => $tvshow['vote_average'] * 10 .'%',
+                'vote_average' => round($tvshow['vote_average'] * 10) . '%',
                 'first_air_date' => Carbon::parse($tvshow['first_air_date'])->format('M d, Y'),
                 'genres' => $genresFormatted,
             ])->only([

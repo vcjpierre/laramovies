@@ -1,15 +1,31 @@
-<div class="mt-8">
-    <a href="{{ route('tv.show', $tvshow['id']) }}">
-        <img src="{{ $tvshow['poster_path'] }}" alt="poster" class="hover:opacity-75 transition ease-in-out duration-150">
-    </a>
-    <div class="mt-2">
-        <a href="{{ route('tv.show', $tvshow['id']) }}" class="text-lg mt-2 hover:text-gray-300">{{ $tvshow['name'] }}</a>
-        <div class="flex items-center text-gray-400 text-sm mt-1">
-            <svg class="fill-current text-orange-500 w-4" viewBox="0 0 24 24"><g data-name="Layer 2"><path d="M17.56 21a1 1 0 01-.46-.11L12 18.22l-5.1 2.67a1 1 0 01-1.45-1.06l1-5.63-4.12-4a1 1 0 01-.25-1 1 1 0 01.81-.68l5.7-.83 2.51-5.13a1 1 0 011.8 0l2.54 5.12 5.7.83a1 1 0 01.81.68 1 1 0 01-.25 1l-4.12 4 1 5.63a1 1 0 01-.4 1 1 1 0 01-.62.18z" data-name="star"/></g></svg>
-            <span class="ml-1">{{ $tvshow['vote_average'] }}</span>
-            <span class="mx-2">|</span>
-            <span>{{ $tvshow['first_air_date'] }}</span>
+<article class="group relative">
+    <a href="{{ route('tv.show', $tvshow['id']) }}" class="block">
+        <div class="relative aspect-[2/3] overflow-hidden rounded-card bg-surface ring-1 ring-white/6 transition duration-300 ease-out group-hover:-translate-y-1.5 group-hover:shadow-glow group-hover:ring-accent/30">
+            <img src="{{ $tvshow['poster_path'] }}" alt="{{ $tvshow['name'] }} poster" loading="lazy"
+                 class="size-full object-cover transition duration-500 ease-out group-hover:scale-[1.04]">
+
+            @if (! empty($tvshow['overview']))
+                <div class="absolute inset-0 flex items-end bg-linear-to-t from-ink via-ink/70 to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <p class="line-clamp-3 text-[11px] leading-snug text-white/80">{{ $tvshow['overview'] }}</p>
+                </div>
+            @endif
         </div>
-        <div class="text-gray-400 text-sm">{{ $tvshow['genres'] }}</div>
+    </a>
+
+    <div class="mt-3">
+        <h3 class="font-display text-[17px] leading-tight text-white/95">
+            <a href="{{ route('tv.show', $tvshow['id']) }}"
+               class="transition-colors duration-200 hover:text-accent">{{ $tvshow['name'] }}</a>
+        </h3>
+
+        <div class="mt-1.5 flex items-center gap-2 text-[11px] text-muted-2">
+            <span class="inline-flex items-center gap-1.5 font-medium tabular-nums text-accent">
+                <span class="size-1 rounded-full bg-accent" aria-hidden="true"></span>{{ $tvshow['vote_average'] }}
+            </span>
+            <span class="h-2.5 w-px bg-line" aria-hidden="true"></span>
+            <span class="tabular-nums">{{ $tvshow['first_air_date'] }}</span>
+        </div>
+
+        <p class="mt-1 line-clamp-1 text-[11px] text-muted-2">{{ $tvshow['genres'] }}</p>
     </div>
-</div>
+</article>
